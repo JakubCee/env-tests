@@ -57,7 +57,7 @@ jobs:
         uses: ./.github/actions/terraform_check
         with:
           env: dev
-          working-directory: ${{ env.PROJECT_ROOT }}
+          working-directory: ${{ env.PROJECT_ROOT }}/../infra
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
@@ -84,7 +84,7 @@ jobs:
         uses: ./.github/actions/terraform_deploy
         with:
           env: dev
-          working-directory: ${{ env.PROJECT_ROOT }}
+          working-directory: ${{ env.PROJECT_ROOT }}/../infra
     
   deploy-prod:
     name: Deploy to prod
@@ -101,7 +101,7 @@ jobs:
         uses: ./.github/actions/terraform_check
         with:
           env: prod
-          working-directory: ${{ env.PROJECT_ROOT }}
+          working-directory: ${{ env.PROJECT_ROOT }}/../infra
 
       
       - name: Install uv
@@ -129,4 +129,4 @@ jobs:
         uses: ./.github/actions/terraform_deploy
         with:
           env: prod
-          working-directory: ${{ env.PROJECT_ROOT }}
+          working-directory: ${{ env.PROJECT_ROOT }}/../infra
