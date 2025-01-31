@@ -2,10 +2,10 @@ name: CI/CD xxx
 on:
   push:
     branches: [main]
-    paths: ['services/xxx/**']
+    paths: ['services/xxx/**', '.github/workflows/envs.yml']
   pull_request:
     branches: [main]
-    paths: ['services/xxx/**']
+    paths: ['services/xxx/**', '.github/workflows/envs.yml']
   workflow_dispatch:
 
   # workflow_call:
@@ -26,6 +26,13 @@ jobs:
       - name: Install deps
         working-directory: ${{ env.PROJECT_ROOT }}
         run: echo "Simulate uv sync" && pwd && ls -al
+      - run: export
+
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
   
   deploy-dev:
     name: Deploy to dev
@@ -49,9 +56,13 @@ jobs:
           echo " Simulate terraform check"
           pwd && ls -al
 
-      - run: echo "Env {{env.ENVIRONMENT }}"
+      - run: echo "Env ${{ vars.ENVIRONMENT }}"
       - run: export
-
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
     
   deploy-prod:
     name: Deploy to prod
@@ -72,5 +83,10 @@ jobs:
         working-directory: ${{ env.PROJECT_ROOT }}
         run: echo "Simulate uv sync" && pwd && ls -al
 
-      - run: echo "Env {{env.ENVIRONMENT }}"
+      - run: echo "Env ${{ vars.ENVIRONMENT }}"
       - run: export
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
