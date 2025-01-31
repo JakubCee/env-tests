@@ -33,5 +33,5 @@ runs:
     shell: bash
     run: |
       tags=$(echo '${{ inputs.tags }}' | jq -r 'join(" ")' )
-      nox -t $tags
+      uv run nox -t $tags
     
