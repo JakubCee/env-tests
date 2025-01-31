@@ -97,6 +97,7 @@ jobs:
           echo "Head ref: $GITHUB_HEAD_REF"
           pwd && ls -al
 
+
       - run: echo "Env ${{ vars.ENVIRONMENT }}"
       - run: export
       - name: Dump GitHub context
