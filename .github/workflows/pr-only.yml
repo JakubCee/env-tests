@@ -39,6 +39,8 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
+
+
   
   deploy-dev:
     name: Deploy to dev
@@ -49,6 +51,12 @@ jobs:
       name: dev
       url: "https://dev.example.com"
     steps:
+      - name: Check infra
+        uses: ./.github/actions/terraform_check
+        with:
+          env: dev
+          working-directory: services/xxx/infra
+
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install uv
