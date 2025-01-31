@@ -7,9 +7,32 @@ authors = [
     { name = "Jakub Cehak", email = "kubo.cehak@gmail.com" }
 ]
 requires-python = ">=3.10"
+
 dependencies = [
-    "nox[nox]>=2024.10.9",
+    "python-dotenv",
+    "pydantic",
+    "pydantic_settings",
+    "pyyaml",
 ]
+
+[dependency-groups]
+dev = [
+   "nox",
+   "pytest",
+   "coverage[toml]",
+   "python-dotenv",
+]
+
+[project.optional-dependencies]
+nox = [
+  "nox",
+  "python-dotenv"
+]
+
+
+[tool.uv]
+default-groups = ["dev"]
+
 
 [project.scripts]
 xxx = "xxx:main"
