@@ -26,6 +26,7 @@ jobs:
       - name: Install deps
         working-directory: ${{ env.PROJECT_ROOT }}
         run: echo "Simulate uv sync" && pwd && ls -al
+      - run: export
   
   deploy-dev:
     name: Deploy to dev
