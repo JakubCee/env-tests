@@ -32,6 +32,6 @@ runs:
     working-directory: ${{ inputs.working-directory }}
     shell: bash
     run: |
-      tags=$(echo ${{ inputs.tags }} | jq -r 'join(" ")' )
-      echo "nox -t $tags"
+      tags=$(echo \'${{ inputs.tags }}\' | jq -r 'join(" ")' )
+      nox -t $tags
     
