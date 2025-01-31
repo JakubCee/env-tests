@@ -1,14 +1,7 @@
 name: CI/CD xxx v3
+
 on:
-  # push:
-  #   branches: [main]
-  #   paths: ['services/xxx/**', '.github/workflows/pr-only.yml']
-  # pull_request:
-  #   branches: [main]
-  #   paths: ['services/xxx/**', '.github/workflows/pr-only.yml']
-  # workflow_dispatch:
   workflow_call:
-    
     inputs:
       project_py_root:
         description: "The root directory of the project for python"
@@ -21,7 +14,6 @@ on:
         default: "services/xxx/infra"
         type: string
 
-
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -30,11 +22,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      # - name: Install uv
-      #   uses: astral-sh/setup-uv@v5
-      #   with:
-      #     enable-cache: true
 
       - name: Run nox sessions
         uses: ./.github/actions/nox_sessions
@@ -73,14 +60,11 @@ jobs:
           env: dev
           working-directory: ${{ inputs.project_infra_root }}
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
+      - name: Run nox sessions
+        uses: ./.github/actions/nox_sessions
         with:
-          enable-cache: true
-
-      - name: Install deps
-        working-directory: ${{ inputs.project_py_root }}
-        run: echo "uv sync --no-dev --extra nox"
+          working-directory: ${{ inputs.project_py_root }}
+          tags: '["gh_tests", "gh_docs"]'  # TODO: Change
 
       - name: Deploy infra
         uses: ./.github/actions/terraform_deploy
@@ -113,15 +97,11 @@ jobs:
           env: prod
           working-directory: ${{ inputs.project_infra_root }}
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
+      - name: Run nox sessions
+        uses: ./.github/actions/nox_sessions
         with:
-          enable-cache: true
-
-      - name: Install deps 
-        working-directory: ${{ inputs.project_py_root }}
-        run: |
-          echo "uv sync"
+          working-directory: ${{ inputs.project_py_root }}
+          tags: '["gh_tests", "gh_docs"]'  # TODO: Change
 
       - name: Deploy infra
         uses: ./.github/actions/terraform_deploy
