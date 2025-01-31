@@ -79,6 +79,12 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
+
+      - name: Deploy infra
+        uses: ./.github/actions/terraform_deploy
+        with:
+          env: dev
+          working-directory: ${{ env.PROJECT_ROOT }}
     
   deploy-prod:
     name: Deploy to prod
@@ -118,3 +124,9 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT" 
+
+      - name: Deploy infra
+        uses: ./.github/actions/terraform_deploy
+        with:
+          env: prod
+          working-directory: ${{ env.PROJECT_ROOT }}
