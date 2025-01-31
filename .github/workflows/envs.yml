@@ -54,6 +54,9 @@ jobs:
         run: |
           echo "Simulate uv sync" 
           echo " Simulate terraform check"
+          echo "Github event name: $GITHUB_EVENT_NAME"
+          echo "Base ref: $GITHUB_BASE_REF"
+          echo "Head ref: $GITHUB_HEAD_REF"
           pwd && ls -al
 
       - run: echo "Env ${{ vars.ENVIRONMENT }}"
