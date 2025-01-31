@@ -1,8 +1,8 @@
 name: CI/CD xxx v3
 on:
-  # push:
-  #   branches: [main]
-  #   paths: ['services/xxx/**', '.github/workflows/pr-only.yml']
+  push:
+    branches: [main]
+    paths: ['services/xxx/**', '.github/workflows/pr-only.yml']
   pull_request:
     branches: [main]
     paths: ['services/xxx/**', '.github/workflows/pr-only.yml']
