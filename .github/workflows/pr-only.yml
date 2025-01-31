@@ -75,7 +75,7 @@ jobs:
     
   deploy-prod:
     name: Deploy to prod
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push' 
+    if: github.ref == 'refs/heads/main' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     needs: tests
     environment:
@@ -92,7 +92,7 @@ jobs:
         working-directory: ${{ env.PROJECT_ROOT }}
         run: |
           echo "Simulate uv sync" 
-          echo "Github event name: $GITHUB_EVENT_NAME"
+          echo "Github event name: $GITHUB_EVENT_NAME "
           echo "Base ref: $GITHUB_BASE_REF"
           echo "Head ref: $GITHUB_HEAD_REF"
           pwd && ls -al
