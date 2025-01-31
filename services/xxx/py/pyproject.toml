@@ -7,11 +7,17 @@ authors = [
     { name = "Jakub Cehak", email = "kubo.cehak@gmail.com" }
 ]
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "nox[nox]>=2024.10.9",
+]
 
 [project.scripts]
 xxx = "xxx:main"
 
+
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+
