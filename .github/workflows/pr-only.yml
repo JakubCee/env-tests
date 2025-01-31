@@ -8,8 +8,6 @@ on:
     paths: ['services/xxx/**', '.github/workflows/envs.yml']
   workflow_dispatch:
 
-  # workflow_call:
-    
 env:
   PROJECT_ROOT: services/xxx/py
 
