@@ -53,7 +53,7 @@ jobs:
         working-directory: ${{ env.PROJECT_ROOT }}
         run: echo "Simulate uv sync" && pwd && ls -al
 
-      - run: echo "Env ${{ var.ENVIRONMENT }}"
+      - run: echo "Env ${{ vars.ENVIRONMENT }}"
       - run: export
       - name: Dump GitHub context
         env:
@@ -80,7 +80,7 @@ jobs:
         working-directory: ${{ env.PROJECT_ROOT }}
         run: echo "Simulate uv sync" && pwd && ls -al
 
-      - run: echo "Env ${{ var.ENVIRONMENT }}"
+      - run: echo "Env ${{ vars.ENVIRONMENT }}"
       - run: export
       - name: Dump GitHub context
         env:
