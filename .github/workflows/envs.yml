@@ -79,7 +79,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-      - name: Install deps
+      - name: Install deps 
         working-directory: ${{ env.PROJECT_ROOT }}
         run: echo "Simulate uv sync" && pwd && ls -al
 
