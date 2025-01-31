@@ -2,10 +2,10 @@ name: CI/CD xxx
 on:
   push:
     branches: [main]
-    paths: ['services/xxx/**']
+    paths: ['services/xxx/**', '.github/workflows/envs.yml']
   pull_request:
     branches: [main]
-    paths: ['services/xxx/**']
+    paths: ['services/xxx/**', '.github/workflows/envs.yml']
   workflow_dispatch:
 
   # workflow_call:
