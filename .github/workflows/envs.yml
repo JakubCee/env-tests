@@ -25,7 +25,13 @@ jobs:
           enable-cache: true
       - name: Install deps
         working-directory: ${{ env.PROJECT_ROOT }}
-        run: echo "Simulate uv sync" && pwd && ls -al
+        run: |
+          echo "Simulate uv sync" 
+          echo "Github event name: $GITHUB_EVENT_NAME"
+          echo "Base ref: $GITHUB_BASE_REF"
+          echo "Head ref: $GITHUB_HEAD_REF"
+          pwd && ls -al
+
       - run: export
 
       - name: Dump GitHub context
@@ -84,7 +90,12 @@ jobs:
           enable-cache: true
       - name: Install deps 
         working-directory: ${{ env.PROJECT_ROOT }}
-        run: echo "Simulate uv sync" && pwd && ls -al
+        run: |
+          echo "Simulate uv sync" 
+          echo "Github event name: $GITHUB_EVENT_NAME"
+          echo "Base ref: $GITHUB_BASE_REF"
+          echo "Head ref: $GITHUB_HEAD_REF"
+          pwd && ls -al
 
       - run: echo "Env ${{ vars.ENVIRONMENT }}"
       - run: export
