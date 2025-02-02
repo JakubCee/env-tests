@@ -5,7 +5,9 @@ on:
   pull_request:
     branches:
     - exp/*
-
+    
+permissions: 
+      deployments: write
 jobs:
   deploy:
     runs-on: ubuntu-latest
