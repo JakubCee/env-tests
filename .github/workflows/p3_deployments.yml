@@ -1,0 +1,33 @@
+on:
+  push:
+    branches:
+    - exp/*
+  pull_request:
+    branches:
+    - exp/*
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: start deployment
+      uses: bobheadxi/deployments@v1
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: dev
+        task: 'dev/xxx'
+
+    - name: do my deploy
+      run: echo "Hello from deployment  ${{ steps.deployment.outputs.deployment_id }} "
+
+    - name: update deployment status
+      uses: bobheadxi/deployments@v1
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        env: ${{ steps.deployment.outputs.env }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
