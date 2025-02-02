@@ -16,11 +16,10 @@ jobs:
       with:
         step: start
         token: ${{ secrets.GITHUB_TOKEN }}
-        env: dev
-        task: 'dev/xxx'
+        env: release
 
     - name: do my deploy
-      run: echo "Hello from deployment  ${{ steps.deployment.outputs.deployment_id }} "
+      run: echo "hi"
 
     - name: update deployment status
       uses: bobheadxi/deployments@v1
