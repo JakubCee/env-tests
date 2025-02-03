@@ -49,12 +49,12 @@ jobs:
       - name: Echo vars
         run: |
           echo "project_py_root: ${{ env.PROJECT_PY_ROOT }}"
-          echo "project_infra_root: ${{ env.project_infra_root }}"
+          echo "project_infra_root: ${{ env.PROJECT_INFRA_ROOT }}"
 
       - name: Run nox sessions
         uses: ./.github/actions/nox_sessions
         with:
-          working-directory: ${{ env.project_py_root }}
+          working-directory: ${{ env.PROJECT_PY_ROOT }}
           tags: '["gh_tests", "gh_docs"]'
 
       # - run: export
@@ -93,19 +93,19 @@ jobs:
         uses: ./.github/actions/terraform_check
         with:
           env: dev
-          working-directory: ${{ env.project_infra_root }}
+          working-directory: ${{ env.PROJECT_INFRA_ROOT }}
 
       - name: Run nox sessions
         uses: ./.github/actions/nox_sessions
         with:
-          working-directory: ${{ env.project_py_root }}
+          working-directory: ${{ env.PROJECT_PY_ROOT }}
           tags: '["gh_tests", "gh_docs"]'  # TODO: Change
 
       - name: Deploy infra
         uses: ./.github/actions/terraform_deploy
         with:
           env: dev
-          working-directory: ${{ env.project_infra_root }}
+          working-directory: ${{ env.PROJECT_INFRA_ROOT }}
     
 
 
@@ -130,16 +130,16 @@ jobs:
         uses: ./.github/actions/terraform_check
         with:
           env: prod
-          working-directory: ${{ env.project_infra_root }}
+          working-directory: ${{ env.PROJECT_INFRA_ROOT }}
 
       - name: Run nox sessions
         uses: ./.github/actions/nox_sessions
         with:
-          working-directory: ${{ env.project_py_root }}
+          working-directory: ${{ env.PROJECT_PY_ROOT }}
           tags: '["gh_tests", "gh_docs"]'  # TODO: Change
 
       - name: Deploy infra
         uses: ./.github/actions/terraform_deploy
         with:
           env: prod
-          working-directory: ${{ env.project_infra_root }}
+          working-directory: ${{ env.PROJECT_INFRA_ROOT }}
