@@ -1,0 +1,110 @@
+name: CI/CD xxx v3
+
+on:
+  workflow_call:
+    inputs:
+      project_py_root:
+        description: "The root directory of the project for python"
+        required: false
+        default: "services/xxx/py"
+        type: string
+      project_infra_root:
+        description: "The root directory of the project for infra"
+        required: false
+        default: "services/xxx/infra"
+        type: string
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: local
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run nox sessions
+        uses: ./.github/actions/nox_sessions
+        with:
+          working-directory: ${{ inputs.project_py_root }}
+          tags: '["gh_tests", "gh_docs"]'
+
+      # - run: export
+
+      # - name: Dump GitHub context
+      #   env:
+      #     GITHUB_CONTEXT: ${{ toJson(github) }}
+      #   run: |
+      #     echo "$GITHUB_CONTEXT"
+
+
+  
+  deploy-dev:
+    name: Deploy to dev
+    if: github.event_name == 'pull_request' && contains(fromJSON('["opened", "synchronize", "reopened"]'), github.event.action)
+    runs-on: ubuntu-latest
+    needs: tests
+    env:
+      ENVIRONMENT: dev
+    environment:
+      name: dev
+      url: "https://dev.example.com"
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Check infra
+        uses: ./.github/actions/terraform_check
+        with:
+          env: dev
+          working-directory: ${{ inputs.project_infra_root }}
+
+      - name: Run nox sessions
+        uses: ./.github/actions/nox_sessions
+        with:
+          working-directory: ${{ inputs.project_py_root }}
+          tags: '["gh_tests", "gh_docs"]'  # TODO: Change
+
+      - name: Deploy infra
+        uses: ./.github/actions/terraform_deploy
+        with:
+          env: dev
+          working-directory: ${{ inputs.project_infra_root }}
+    
+
+
+
+
+  deploy-prod:
+    name: Deploy to prod
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: tests
+    env:
+      ENVIRONMENT: prod
+    environment:
+      name: prod
+      url: "https://prod.example.com"
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Check infra
+        uses: ./.github/actions/terraform_check
+        with:
+          env: prod
+          working-directory: ${{ inputs.project_infra_root }}
+
+      - name: Run nox sessions
+        uses: ./.github/actions/nox_sessions
+        with:
+          working-directory: ${{ inputs.project_py_root }}
+          tags: '["gh_tests", "gh_docs"]'  # TODO: Change
+
+      - name: Deploy infra
+        uses: ./.github/actions/terraform_deploy
+        with:
+          env: prod
+          working-directory: ${{ env.PROJECT_ROOT }}/../infra

@@ -1,0 +1,38 @@
+name: Nox sessions
+description: Run nox sessions in order
+
+inputs:
+  working-directory:
+    description: "The working directory to run nox sessions"
+  tags:
+    description: "The tags to run nox sessions in order, input must be a valid json array"
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+  - name: Checkout
+    uses: actions/checkout@v4
+    with:
+      fetch-depth: 200
+
+  - name: Install uv
+    uses: astral-sh/setup-uv@v5
+    with:
+      enable-cache: true
+
+  - name: Install project with nox
+    working-directory: ${{ inputs.working-directory }}
+    shell: bash
+    run: |
+      echo "CWD: $(pwd)"
+      uv sync --no-dev --extra nox
+
+  - name: Run nox sessions by tag
+    working-directory: ${{ inputs.working-directory }}
+    shell: bash
+    run: |
+      tags=$(echo '${{ inputs.tags }}' | jq -r 'join(" ")' )
+      uv run nox -t $tags
+    

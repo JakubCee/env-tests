@@ -9,6 +9,11 @@ inputs:
     description: "The working directory to run Terraform commands in, eg. services/xxx/infra"
     required: false
     default: "."
+  upload-terraform-output:
+    description: "Upload terraform output as artifact"
+    required: false
+    default: "true"
+
 
 runs:
   using: "composite"
@@ -19,20 +24,12 @@ runs:
     uses: actions/checkout@v4
     with:
       fetch-depth: 200
-    
-  # - name: Configure AWS Credentials
-  #   uses: ./.github/actions/aws-auth
-  #   with:
-  #     env: ${{ matrix.env }}
-  #     aws_role_name: github-actions-cicd-role
-  #     region: ${{ env.AWS_REGION }}
 
   - name: Simulate aws configure
     shell: bash
     run: |
       echo "Simulate aws configure...."
 
-  
   - name: Setup Terraform
     uses: hashicorp/setup-terraform@v3
 
@@ -47,10 +44,23 @@ runs:
     run: terraform validate
     working-directory: ${{ inputs.working-directory }}
     
-  - name: Plan Terraform
+  - name: Apply Terraform
     shell: bash
     run: terraform apply -auto-approve -var-file=envs/${{ inputs.env }}.tfvars
     working-directory: ${{ inputs.working-directory }}
+
+  - name: Terraform Outputs
+    if: ${{ inputs.upload-terraform-output == 'true' }}
+    shell: bash
+    run: terraform output -json | tee terraform_output.json
+    working-directory: ${{ inputs.working-directory }}
+
+  - name: Terraform output upload artifact
+    if: ${{ inputs.upload-terraform-output == 'true' }}
+    uses: actions/upload-artifact@v4
+    with:
+      name: terraform_output
+      path: ${{ inputs.working-directory }}/terraform_output.json
 
   - name: Checks failed
     shell: bash

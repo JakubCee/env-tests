@@ -1,0 +1,31 @@
+name: CI/CD for XXX project
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
+
+
+on:
+  push:
+    branches: [main]
+    paths: 
+      - 'services/xxx/**'
+      - '.github/workflows/_reusable_CICD'
+
+  pull_request:
+    branches: [main]
+    paths: 
+      - 'services/xxx/**'
+      - '.github/workflows/_reusable_CICD'
+
+  workflow_dispatch:
+
+
+jobs:
+  main-ci:
+    uses: ./.github/workflows/_reusable_CICD.yml
+    secrets: inherit
+    with:
+      project_py_root: services/xxx/py
+      project_infra_root: services/xxx/infra
+      # TODO: pass nox sessions here

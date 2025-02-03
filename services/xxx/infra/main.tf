@@ -21,3 +21,12 @@ resource "local_file" "example" {
   filename = "${path.module}/${var.filename}"
   content  = "Hello, this is a Terraform-managed file!"
 }
+
+output "FileContentBase64" {
+  value = local_file.example.filename
+  
+}
+
+output "cwd" {
+  value = path.module
+}
