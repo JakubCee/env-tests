@@ -126,6 +126,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume:  arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/GH-actions-OIDC
+          role-session-name: gha-session
+          aws-region: eu-west-1
+
       - name: Check infra
         uses: ./.github/actions/terraform_check
         with:

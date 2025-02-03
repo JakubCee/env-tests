@@ -39,9 +39,14 @@ runs:
     run: terraform validate
     working-directory: ${{ inputs.working-directory }}
     
-  - name: Plan Terraform
+  - name: Apply Terraform
     shell: bash
     run: terraform apply -auto-approve -var-file=envs/${{ inputs.env }}.tfvars
+    working-directory: ${{ inputs.working-directory }}
+
+  - name: Terraform Outputs
+    shell: bash
+    run: terraform output
     working-directory: ${{ inputs.working-directory }}
 
   - name: Checks failed
