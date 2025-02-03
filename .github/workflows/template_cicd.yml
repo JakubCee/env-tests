@@ -29,11 +29,12 @@ on:
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read  # This is required for actions/checkout
+  deployments: write
 
 
 env:
-  PROJECT_PY_ROOT: ${{ github.event.inputs.project_py_root }} || "services/xxx/py"
-  PROJECT_INFRA_ROOT: ${{ github.event.inputs.project_infra_root }} || "services/xxx/infra"
+  PROJECT_PY_ROOT: ${{ github.event.inputs.project_py_root || 'services/xxx/py' }} 
+  PROJECT_INFRA_ROOT: ${{ github.event.inputs.project_infra_root || 'services/xxx/infra' }}
 
 
 jobs:
