@@ -117,7 +117,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: terraform_output
-          path: ${{ env.PROJECT_PY_ROOT }}/terraform_output.json
+          path: ${{ env.PROJECT_INFRA_ROOT }}/terraform_output.json
     
 
 
