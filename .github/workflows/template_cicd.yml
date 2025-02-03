@@ -40,6 +40,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Echo vars
+        run: |
+          echo "project_py_root: ${{ inputs.project_py_root }}"
+          echo "project_infra_root: ${{ inputs.project_infra_root }}"
+
       - name: Run nox sessions
         uses: ./.github/actions/nox_sessions
         with:
