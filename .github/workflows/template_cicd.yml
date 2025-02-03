@@ -113,11 +113,15 @@ jobs:
           env: dev
           working-directory: ${{ env.PROJECT_INFRA_ROOT }}
       
-      # - name: Upload terraform output artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: terraform_output
-      #     path: ${{ env.PROJECT_INFRA_ROOT }}/terraform_output.json
+      - name: Notify Slack
+        if: always()
+        uses: ./.github/actions/slack-notify
+        with:
+          job-status: ${{ job.status }}
+          env: dev
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          process-title: "Deploy to dev PROJECT XXX"
+          message: "Deployment to DEV"
     
 
 
