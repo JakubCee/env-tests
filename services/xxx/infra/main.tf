@@ -23,6 +23,10 @@ resource "local_file" "example" {
 }
 
 output "FileContentBase64" {
-  value = local_file.example.content_base64
+  value = local_file.example.filename
   
+}
+
+output "cwd" {
+  value = path.module
 }

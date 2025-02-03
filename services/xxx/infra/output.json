@@ -1,0 +1,12 @@
+{
+  "FileContentBase64": {
+    "sensitive": false,
+    "type": "string",
+    "value": "./example.txt"
+  },
+  "cwd": {
+    "sensitive": false,
+    "type": "string",
+    "value": "."
+  }
+}
