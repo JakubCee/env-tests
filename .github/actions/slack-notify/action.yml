@@ -3,7 +3,7 @@ description: Post a message to Slack when a deployment is finished
 
 inputs:
   job-status:
-    description: Job status
+    description: Job status [success|failure]
     required: true
   env:
     description: The AWS env to auth with [dev|staging|prod]
@@ -24,8 +24,6 @@ runs:
       env:
         SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-        STATUS_ICON: ${{ inputs.job-status == 'success' && ':white_check_mark:' ||
-          ':rotating_light:' }}
       with:
         payload: |
           {
@@ -40,10 +38,16 @@ runs:
               },
               {
                 "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "```Environment: ${{ inputs.env }}```"
-                }
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Environment:*\n${{ inputs.env }}* ${{ inputs.env == 'prod' && ':rocket:' || inputs.env == 'dev' && ':construction:' || inputs.env == 'staging' && ':test_tube:' || '-' }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Status:*\n${{ inputs.job-status }} ${{ inputs.job-status == 'success' && ':white_check_mark:' || ':rotating_light:' }}"
+                  }
+                ]
               },
               {
                 "type": "section",
@@ -61,8 +65,8 @@ runs:
               {
                 "type": "section",
                 "text": {
-                    "type": "mrkdwn",
-                    "text": "*Commit:* <${{ github.server_url }}/${{ github.repository }}/commit/${{github.sha}}|${{github.sha}}>"
+                  "type": "mrkdwn",
+                  "text": "*Commit:* <${{ github.server_url }}/${{ github.repository }}/commit/${{github.sha}}|${{github.sha}}>"
                 }
               },
               {
@@ -76,7 +80,7 @@ runs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "```Status: ${{ inputs.job-status }}```"
+                  "text": " "
                 }
               },
               {
