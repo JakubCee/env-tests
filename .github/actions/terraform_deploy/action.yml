@@ -51,10 +51,9 @@ runs:
 
   - name: Terraform output upload artifact
     uses: actions/upload-artifact@v4
-    working-directory: ${{ inputs.working-directory }}
     with:
       name: terraform_output
-      path: terraform_output.json
+      path: ${{ inputs.working-directory }}/terraform_output.json
 
   - name: Checks failed
     shell: bash
