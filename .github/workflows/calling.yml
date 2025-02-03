@@ -27,3 +27,4 @@ jobs:
     with:
       project_py_root: services/xxx/py
       project_infra_root: services/xxx/infra
+      # TODO: pass nox sessions here
