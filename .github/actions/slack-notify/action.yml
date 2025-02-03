@@ -14,6 +14,9 @@ inputs:
   process-title:
     description: Process title
     required: true
+  message: 
+    description: Additional text to post to Slack
+    required: false
 
 runs:
   using: composite
@@ -41,7 +44,7 @@ runs:
                 "fields": [
                   {
                     "type": "mrkdwn",
-                    "text": "*Environment:*\n${{ inputs.env }}* ${{ inputs.env == 'prod' && ':rocket:' || inputs.env == 'dev' && ':construction:' || inputs.env == 'staging' && ':test_tube:' || '-' }}"
+                    "text": "*Environment:*\n*${{ inputs.env }}* ${{ inputs.env == 'prod' && ':rocket:' || inputs.env == 'dev' && ':construction:' || inputs.env == 'staging' && ':test_tube:' || '-' }}"
                   },
                   {
                     "type": "mrkdwn",
@@ -80,7 +83,7 @@ runs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": " "
+                  "text": "${{ inputs.message || ' '}}"
                 }
               },
               {

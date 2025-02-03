@@ -114,12 +114,14 @@ jobs:
           working-directory: ${{ env.PROJECT_INFRA_ROOT }}
       
       - name: Notify Slack
+        if: always()
         uses: ./.github/actions/slack-notify
         with:
-          job-status: success
+          job-status: ${{ job.status }}
           env: dev
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           process-title: "Deploy to dev PROJECT XXX"
+          message: "Deployment to DEV"
     
 
 
