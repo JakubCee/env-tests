@@ -31,6 +31,11 @@ permissions:
   contents: read  # This is required for actions/checkout
 
 
+env:
+  PROJECT_PY_ROOT: ${{ github.event.inputs.project_py_root }} || "services/xxx/py"
+  PROJECT_INFRA_ROOT: ${{ github.event.inputs.project_infra_root }} || "services/xxx/infra"
+
+
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -42,13 +47,13 @@ jobs:
 
       - name: Echo vars
         run: |
-          echo "project_py_root: ${{ inputs.project_py_root }}"
-          echo "project_infra_root: ${{ inputs.project_infra_root }}"
+          echo "project_py_root: ${{ env.PROJECT_PY_ROOT }}"
+          echo "project_infra_root: ${{ env.project_infra_root }}"
 
       - name: Run nox sessions
         uses: ./.github/actions/nox_sessions
         with:
-          working-directory: ${{ inputs.project_py_root }}
+          working-directory: ${{ env.project_py_root }}
           tags: '["gh_tests", "gh_docs"]'
 
       # - run: export
@@ -87,19 +92,19 @@ jobs:
         uses: ./.github/actions/terraform_check
         with:
           env: dev
-          working-directory: ${{ inputs.project_infra_root }}
+          working-directory: ${{ env.project_infra_root }}
 
       - name: Run nox sessions
         uses: ./.github/actions/nox_sessions
         with:
-          working-directory: ${{ inputs.project_py_root }}
+          working-directory: ${{ env.project_py_root }}
           tags: '["gh_tests", "gh_docs"]'  # TODO: Change
 
       - name: Deploy infra
         uses: ./.github/actions/terraform_deploy
         with:
           env: dev
-          working-directory: ${{ inputs.project_infra_root }}
+          working-directory: ${{ env.project_infra_root }}
     
 
 
@@ -124,16 +129,16 @@ jobs:
         uses: ./.github/actions/terraform_check
         with:
           env: prod
-          working-directory: ${{ inputs.project_infra_root }}
+          working-directory: ${{ env.project_infra_root }}
 
       - name: Run nox sessions
         uses: ./.github/actions/nox_sessions
         with:
-          working-directory: ${{ inputs.project_py_root }}
+          working-directory: ${{ env.project_py_root }}
           tags: '["gh_tests", "gh_docs"]'  # TODO: Change
 
       - name: Deploy infra
         uses: ./.github/actions/terraform_deploy
         with:
           env: prod
-          working-directory: ${{ env.PROJECT_ROOT }}/../infra
+          working-directory: ${{ env.project_infra_root }}
