@@ -49,12 +49,12 @@ runs:
     run: terraform output -json | tee terraform_output.json
     working-directory: ${{ inputs.working-directory }}
 
-  - name: Terraform output upload artifact
-    uses: actions/upload-artifact@v2
-    working-directory: ${{ inputs.working-directory }}
-    with:
-      name: terraform_output
-      path: terraform_output.json
+  # - name: Terraform output upload artifact
+  #   uses: actions/upload-artifact@v2
+  #   working-directory: ${{ inputs.working-directory }}
+  #   with:
+  #     name: terraform_output
+  #     path: terraform_output.json
 
   - name: Checks failed
     shell: bash
