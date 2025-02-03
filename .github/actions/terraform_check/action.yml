@@ -20,12 +20,7 @@ runs:
     with:
       fetch-depth: 200
     
-  - name: Configure AWS Credentials
-    uses: aws-actions/configure-aws-credentials@v4
-    with:
-      role-to-assume:  arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/GH-actions-OIDC
-      role-session-name: gha-session
-      aws-region: eu-west-1
+
 
   - name: Simulate aws configure
     shell: bash
