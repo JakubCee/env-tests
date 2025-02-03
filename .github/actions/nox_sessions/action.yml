@@ -25,7 +25,9 @@ runs:
   - name: Install project with nox
     working-directory: ${{ inputs.working-directory }}
     shell: bash
-    run: uv sync --no-dev --extra nox
+    run: |
+      echo "CWD: $(pwd)"
+      uv sync --no-dev --extra nox
 
   - name: Run nox sessions by tag
     working-directory: ${{ inputs.working-directory }}
