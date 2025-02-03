@@ -1,0 +1,86 @@
+name: slack-deployment-notification
+description: Post a message to Slack when a deployment is finished
+
+inputs:
+  job-status:
+    description: Job status
+    required: true
+  env:
+    description: The AWS env to auth with [dev|staging|prod]
+    required: true
+  slack-webhook-url:
+    description: Slack webhook
+    required: true
+  process-title:
+    description: Process title
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Post to Slack
+      id: slack
+      uses: slackapi/slack-github-action@v1
+      env:
+        SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        STATUS_ICON: ${{ inputs.job-status == 'success' && ':white_check_mark:' ||
+          ':rotating_light:' }}
+      with:
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "${{ inputs.process-title }}",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "```Environment: ${{ inputs.env }}```"
+                }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Workflow:*\n${{github.workflow}}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Author:*\n<${{github.event.sender.url}} | ${{ github.event.sender.login }}>"
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*Commit:* <${{ github.server_url }}/${{ github.repository }}/commit/${{github.sha}}|${{github.sha}}>"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Repo/branch:*\n${{ github.repository }}@${{ github.ref }}"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "```Status: ${{ inputs.job-status }}```"
+                }
+              },
+              {
+                "type": "divider"
+              }
+            ]
+          }
