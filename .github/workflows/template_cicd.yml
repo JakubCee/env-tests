@@ -112,6 +112,12 @@ jobs:
         with:
           env: dev
           working-directory: ${{ env.PROJECT_INFRA_ROOT }}
+      
+      - name: Upload terraform output artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: terraform_output
+          path: ${{ env.PROJECT_PY_ROOT }}/terraform_output.json
     
 
 
